@@ -1,3 +1,6 @@
 .env
 .docker_build/
 bin/
+credentials.json
+test-files/
+s3-policy.json
