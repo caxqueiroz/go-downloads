@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>S3 File Download Server</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .file-list {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        .file-header {
+            background-color: #f5f5f5;
+            padding: 10px 15px;
+            border-bottom: 1px solid #ddd;
+            font-weight: bold;
+            display: grid;
+            grid-template-columns: 3fr 1fr 1fr 1fr;
+        }
+        .file-item {
+            padding: 12px 15px;
+            border-bottom: 1px solid #eee;
+            display: grid;
+            grid-template-columns: 3fr 1fr 1fr 1fr;
+        }
+        .file-item:last-child {
+            border-bottom: none;
+        }
+        .file-item:hover {
+            background-color: #f9f9f9;
+        }
+        .file-name {
+            font-weight: 500;
+        }
+        .file-size, .file-date {
+            color: #666;
+        }
+        .download-btn {
+            text-decoration: none;
+            color: #fff;
+            background-color: #4CAF50;
+            padding: 6px 12px;
+            border-radius: 4px;
+            text-align: center;
+            display: inline-block;
+            font-size: 14px;
+        }
+        .download-btn:hover {
+            background-color: #45a049;
+        }
+        .empty-message {
+            text-align: center;
+            padding: 30px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <h1>S3 File Download Server</h1>
+    
+    <div class="file-list">
+        <div class="file-header">
+            <div>Name</div>
+            <div>Size</div>
+            <div>Last Modified</div>
+            <div>Action</div>
+        </div>
+        
+        {{if .Files}}
+            {{range .Files}}
+            <div class="file-item">
+                <div class="file-name">{{.Key}}</div>
+                <div class="file-size">{{.Size}}</div>
+                <div class="file-date">{{.LastModified}}</div>
+                <div>
+                    <a href="/download/{{.Key}}" class="download-btn">Download</a>
+                </div>
+            </div>
+            {{end}}
+        {{else}}
+            <div class="empty-message">No files found in the S3 bucket.</div>
+        {{end}}
+    </div>
+</body>
+</html>

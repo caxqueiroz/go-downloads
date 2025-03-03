@@ -1,10 +1,36 @@
 {
-  "name": "Start on Heroku: Go",
-  "description": "Go Downloads App",
+  "name": "S3 File Download Server",
+  "description": "A Go application that serves as a download server for files stored in an AWS S3 bucket",
   "keywords": [
     "downloads",
-    "go"
+    "go",
+    "s3",
+    "aws"
   ],
-  "website": "https://github.com/heroku/go-getting-started",
-  "repository": "https://github.com/heroku/go-getting-started"
+  "website": "https://github.com/caxqueiroz/go-downloads",
+  "repository": "https://github.com/caxqueiroz/go-downloads",
+  "env": {
+    "S3_BUCKET_NAME": {
+      "description": "The name of the S3 bucket containing the files",
+      "required": true
+    },
+    "AWS_REGION": {
+      "description": "The AWS region where the S3 bucket is located",
+      "value": "us-east-1",
+      "required": false
+    },
+    "AWS_ACCESS_KEY_ID": {
+      "description": "Your AWS access key ID",
+      "required": true
+    },
+    "AWS_SECRET_ACCESS_KEY": {
+      "description": "Your AWS secret access key",
+      "required": true
+    }
+  },
+  "buildpacks": [
+    {
+      "url": "heroku/go"
+    }
+  ]
 }
