@@ -1,3 +1,15 @@
+# v1.79.0 (2025-03-31)
+
+* **Feature**: Amazon S3 adds support for S3 Access Points for directory buckets in AWS Dedicated Local Zones
+
+# v1.78.2 (2025-03-11)
+
+* **Dependency Update**: Updated to the latest SDK module versions
+
+# v1.78.1 (2025-03-04.2)
+
+* **Bug Fix**: Add assurance test for operation order.
+
 # v1.78.0 (2025-02-27)
 
 * **Feature**: Track credential providers via User-Agent Feature ids
