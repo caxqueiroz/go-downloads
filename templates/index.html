@@ -86,7 +86,7 @@
                 <div class="file-size">{{.Size}}</div>
                 <div class="file-date">{{.LastModified}}</div>
                 <div>
-                    <a href="/download/{{.Key}}" class="download-btn">Download</a>
+                    <a href="{{url "/download/"}}{{.Key}}" class="download-btn">Download</a>
                 </div>
             </div>
             {{end}}

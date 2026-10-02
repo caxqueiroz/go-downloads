@@ -21,6 +21,11 @@ clean:
 
 # Deploy to Heroku
 deploy: build
+	# Login to Heroku container registry
+	heroku container:login
+	# Build using Docker directly first to ensure it works
+	docker build -t $(APP_NAME) .
+	# Then push to Heroku
 	heroku container:push web --app $(APP_NAME)
 	heroku container:release web --app $(APP_NAME)
 
@@ -62,13 +67,18 @@ setup-heroku:
 	@read ACCESS_KEY && heroku config:set AWS_ACCESS_KEY_ID=$$ACCESS_KEY --app $(APP_NAME)
 	@echo "Please enter your AWS Secret Access Key:"
 	@read SECRET_KEY && heroku config:set AWS_SECRET_ACCESS_KEY=$$SECRET_KEY --app $(APP_NAME)
+	@echo "Please enter a password for accessing the application (leave empty for no password):"
+	@IFS= read -r APP_PASSWORD && heroku config:set "APP_PASSWORD=$$APP_PASSWORD" --app $(APP_NAME)
 	@echo "Heroku configuration complete"
 
 # Run the application locally
 run-local:
-	export S3_BUCKET_NAME=$(S3_BUCKET) && \
-	export AWS_REGION=$(REGION) && \
-	export PORT=8080 && \
+	@echo "Enter a password for accessing the application (leave empty for no password):"
+	@IFS= read -r APP_PASSWORD && \
+	S3_BUCKET_NAME=$(S3_BUCKET) \
+	AWS_REGION=$(REGION) \
+	PORT=8080 \
+	APP_PASSWORD=$$APP_PASSWORD \
 	go run main.go
 
 # View application logs

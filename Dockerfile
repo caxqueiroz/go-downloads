@@ -1,4 +1,4 @@
-FROM heroku/heroku:20-build as build
+FROM heroku/heroku:20-build AS build
 
 COPY . /app
 WORKDIR /app
@@ -14,7 +14,7 @@ RUN STACK=heroku-20 /tmp/buildpack/heroku/go/bin/compile /app /tmp/build_cache /
 FROM heroku/heroku:20
 
 COPY --from=build /app /app
-ENV HOME /app
+ENV HOME=/app
 WORKDIR /app
 USER heroku
-CMD /app/bin/go-downloads
+CMD ["/app/bin/go-downloads"]

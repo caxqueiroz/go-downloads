@@ -4,3 +4,5 @@ bin/
 credentials.json
 test-files/
 s3-policy.json
+.idea/
+/go-downloads

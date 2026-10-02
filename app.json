@@ -26,6 +26,10 @@
     "AWS_SECRET_ACCESS_KEY": {
       "description": "Your AWS secret access key",
       "required": true
+    },
+    "APP_PASSWORD": {
+      "description": "Optional password to restrict access to the application",
+      "required": false
     }
   },
   "buildpacks": [
