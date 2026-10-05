@@ -10,6 +10,7 @@ A Go application that serves as a download server for files stored in an AWS S3 
 - Responsive web interface
 - RESTful API endpoint for programmatic access
 - Optional password protection for accessing files
+- Optional extra buckets, each under its own URL and password
 
 ## Prerequisites
 
@@ -31,6 +32,7 @@ The application requires the following environment variables:
 - `SESSION_SECRET`: Optional key used to sign session cookies (if not set, a random one is generated at startup and sessions reset on restart)
 - `SESSION_COOKIE_SECURE`: Defaults to secure cookies requiring HTTPS; set to `false` only for local HTTP development
 - `BASE_PATH`: Optional URL prefix such as `/downloads` when a reverse proxy strips that prefix before forwarding requests
+- `BUCKETS`: Optional JSON object of extra buckets keyed by the name used in the URL, e.g. `{"photos":{"bucket":"family-photos","password":"secret"}}`. Names may contain only `a-z`, `0-9` and `-`, and cannot be `login`, `download` or `api`. Omit `password` to leave a bucket open. All buckets use the same endpoint and credentials
 - `S3_ENDPOINT`: Optional endpoint for an S3-compatible store such as SeaweedFS (e.g. `http://mac-mini-uno:8333`); enables path-style addressing
 
 ## Running Locally
@@ -56,6 +58,8 @@ go run main.go
 - `GET /`: Web interface showing the list of files (protected when password is set)
 - `GET /download/:filename`: Download a specific file (protected when password is set)
 - `GET /api/files`: JSON API endpoint returning the list of files (protected when password is set)
+
+Each bucket in `BUCKETS` has the same routes under its name, with its own password and session: `/<name>/`, `/<name>/login`, `/<name>/download/:filename` and `/<name>/api/files`. The routes above serve the `S3_BUCKET_NAME` bucket.
 
 ## Deployment
 

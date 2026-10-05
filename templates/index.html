@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>S3 File Download Server</title>
+    <title>S3 File Download Server{{if .Name}} - {{.Name}}{{end}}</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -69,7 +69,7 @@
     </style>
 </head>
 <body>
-    <h1>S3 File Download Server</h1>
+    <h1>{{if .Name}}{{.Name}} - {{end}}S3 File Download Server</h1>
     
     <div class="file-list">
         <div class="file-header">
@@ -86,7 +86,7 @@
                 <div class="file-size">{{.Size}}</div>
                 <div class="file-date">{{.LastModified}}</div>
                 <div>
-                    <a href="{{url "/download/"}}{{.Key}}" class="download-btn">Download</a>
+                    <a href="{{$.Base}}/download/{{.Key}}" class="download-btn">Download</a>
                 </div>
             </div>
             {{end}}
