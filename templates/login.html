@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - S3 File Download Server</title>
+    <title>Login - S3 File Download Server{{if .Name}} - {{.Name}}{{end}}</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -59,10 +59,10 @@
     </style>
 </head>
 <body>
-    <h1>S3 File Download Server</h1>
+    <h1>{{if .Name}}{{.Name}} - {{end}}S3 File Download Server</h1>
 
     <div class="login-form">
-        <form method="POST" action="{{url "/login"}}">
+        <form method="POST" action="{{.Base}}/login">
             <div class="form-group">
                 <label for="password">Password:</label>
                 <input type="password" id="password" name="password" required>
