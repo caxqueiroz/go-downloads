@@ -1,0 +1,44 @@
+# Lightsail launch script: runs once as root on first boot.
+# Log: /var/log/cloud-init-output.log
+set -eu
+export DEBIAN_FRONTEND=noninteractive
+
+# The nano plan has 512 MB of RAM; give apt some headroom.
+fallocate -l 1G /swapfile
+chmod 600 /swapfile
+mkswap /swapfile
+swapon /swapfile
+echo '/swapfile none swap sw 0 0' >> /etc/fstab
+
+curl -fsSL https://tailscale.com/install.sh | sh
+tailscale up --auth-key='${tailscale_auth_key}' --hostname='${hostname}' --ssh
+
+apt-get install -y debian-keyring debian-archive-keyring apt-transport-https curl gnupg
+curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/gpg.key' | gpg --dearmor -o /usr/share/keyrings/caddy-stable-archive-keyring.gpg
+curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/debian.deb.txt' > /etc/apt/sources.list.d/caddy-stable.list
+apt-get update
+apt-get install -y caddy
+
+cat > /etc/caddy/Caddyfile <<'CADDY'
+%{ for host, site in sites ~}
+${host} {
+%{ if site.strip_prefix != "" ~}
+	redir / ${trimsuffix(site.strip_prefix, "/")}/
+	redir ${trimsuffix(site.strip_prefix, "/")} ${trimsuffix(site.strip_prefix, "/")}/
+	handle_path ${trimsuffix(site.strip_prefix, "/")}/* {
+		reverse_proxy ${site.upstream}
+	}
+%{ else ~}
+%{ if startswith(site.upstream, "https://") ~}
+	reverse_proxy ${site.upstream} {
+		header_up Host {upstream_hostport}
+	}
+%{ else ~}
+	reverse_proxy ${site.upstream}
+%{ endif ~}
+%{ endif ~}
+}
+
+%{ endfor ~}
+CADDY
+systemctl restart caddy

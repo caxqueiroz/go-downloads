@@ -6,3 +6,9 @@ test-files/
 s3-policy.json
 .idea/
 /go-downloads
+
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+terraform.tfvars
